@@ -1,0 +1,32 @@
+﻿生成启动时间为 2018/2/10 22:15:17。
+项目“C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\DecryptFromBmp\DecryptFromBmp.vcxproj”在节点 2 上(rebuild 个目标)。
+InitializeBuildStatus:
+  正在创建“Debug\DecryptFromBmp.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+ClCompile:
+  c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt DecryptFromBmp.cpp
+  DecryptFromBmp.cpp
+ResourceCompile:
+  c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Debug\DecryptFromBmp.res" DecryptFromBmp.rc 
+ManifestResourceCompile:
+  c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\DecryptFromBmp.exe.embed.manifest.res" Debug\DecryptFromBmp_manifest.rc 
+Link:
+  c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\DecryptFromBmp.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.lib" /MACHINE:X86 Debug\DecryptFromBmp.res
+  Debug\DecryptFromBmp.exe.embed.manifest.res
+  Debug\DecryptFromBmp.obj
+Manifest:
+  正在删除文件“Debug\DecryptFromBmp.exe.embed.manifest”。
+  c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\DecryptFromBmp.exe.embed.manifest" /manifest Debug\DecryptFromBmp.exe.intermediate.manifest
+  c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\DecryptFromBmp.exe.embed.manifest.res" Debug\DecryptFromBmp_manifest.rc 
+LinkEmbedManifest:
+  c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\DecryptFromBmp.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.lib" /MACHINE:X86 Debug\DecryptFromBmp.res
+  Debug\DecryptFromBmp.exe.embed.manifest.res
+  Debug\DecryptFromBmp.obj
+  DecryptFromBmp.vcxproj -> C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\Debug\DecryptFromBmp.exe
+FinalizeBuildStatus:
+  正在删除文件“Debug\DecryptFromBmp.unsuccessfulbuild”。
+  正在对“Debug\DecryptFromBmp.lastbuildstate”执行 Touch 任务。
+已完成生成项目“C:\Users\liujinguang\Desktop\vsproject\DecryptFromBmp\DecryptFromBmp\DecryptFromBmp.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.22
